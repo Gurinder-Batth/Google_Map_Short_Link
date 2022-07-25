@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Lat and Long For Google Short Link</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <label for="">Short URL</label>
+        <textarea type="text" class="form-control" cols="50" id="url_text">https://goo.gl/maps/xTUerhF6nS7ghir19</textarea>
+        <button onclick="fetchData()" class="btn btn-success mt-4">Submit</button>
+        <div id="data" class="mt-4 jumbotron">Result Will Display Here...</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js"></script>
+    <script>
+        const url_text = document.getElementById("url_text")
+        const data_content = document.getElementById("data")
+        const fetchData = () => {
+            if (url_text.value.length < 3) {
+                alert("invalid url")
+            }
+            const key = 'AKfycbxgZqeo57DTX6abnxdqIBh_oIN5S6dbCTa3JRc_-YKitI3BGp0RV4hh78KfWiCaFB6L';
+            const url = `https://script.google.com/macros/s/${key}/exec`
+            data_content.innerHTML = "Loading...."
+            axios.get(`${url}?location=${url_text.value}`)
+            .then(res => {
+                data_content.innerHTML = `
+                  lat: ${res.data.lat} <br>
+                  long: ${res.data.long} <br>
+                `
+            })
+            .catch(e => {
+                data_content.innerHTML = "Something Went Wrong...."
+            })
+        }
+    </script>
+</body>
+</html>
